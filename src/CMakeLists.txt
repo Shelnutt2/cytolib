@@ -4,7 +4,15 @@
 file(GLOB SOURCES "*.cpp")
 include_directories(../inst/include)
 add_library(cytolib STATIC ${SOURCES} GatingSet.pb.cc)
-add_dependencies( cytolib h5libs pblibs)
+add_dependencies( cytolib h5libs pblibs )
+if(NOT TILEDB_FOUND)
+    add_dependencies(cytolib tiledb)
+else()
+    # The libraries don't seem to be linked in to this project
+    # If you wanted to link cytolib to TileDB, you'd add the lines below for linking a system package
+    #find_package(TileDB REQUIRED)
+    #target_link_libraries(cytolib TileDB::tiledb_shared)
+endif()
 
 
 install(TARGETS cytolib DESTINATION cytolib/lib)
